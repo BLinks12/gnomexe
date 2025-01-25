@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gnitter - Garden Network</title>
+    <title>Gnitter - Garden Network Terminal</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -32,261 +32,263 @@
             animation: flicker 0.1s infinite;
         }
 
-        .container {
-            max-width: 800px;
-            width: 90%;
-            margin: 2rem;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 2rem;
-            position: relative;
-        }
-
-        .header h1 {
-            font-size: 3rem;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px var(--crt-green);
-            margin: 0;
-            position: relative;
-        }
-
-        .gnitter-feed {
-            border: 3px solid #00ff0077;
-            background: #001100;
-            box-shadow: inset 0 0 20px #002200;
-        }
-
-        .compose-box {
-            padding: 1rem;
-            border-bottom: 2px solid #00ff0033;
-        }
-
-        .gnitter-input {
+        /* Enhanced Terminal Header */
+        .terminal-header {
             width: 100%;
             padding: 1rem;
+            background: #001100;
+            border-bottom: 3px solid #00ff0077;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+        }
+
+        .system-status {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .status-light {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #00ff00;
+            box-shadow: 0 0 10px #00ff0077;
+        }
+
+        /* Advanced Feed Controls */
+        .feed-controls {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .gnome-button {
             background: #002200;
             border: 2px solid #00ff0077;
             color: var(--crt-green);
-            font-family: inherit;
-            font-size: 1.2rem;
-            resize: vertical;
-            min-height: 100px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .gnitter-input:focus {
-            outline: none;
-            box-shadow: 0 0 15px #00ff0033;
+        .gnome-button:hover {
+            background: #00ff0022;
+            box-shadow: 0 0 10px #00ff0033;
         }
 
-        .gnitter-posts {
-            height: 600px;
-            overflow-y: auto;
-            padding: 1rem;
-        }
-
+        /* Enhanced Post Visualization */
         .gnitter-post {
-            margin: 1rem 0;
-            padding: 1rem;
-            border: 1px solid #00ff0033;
-            background: #001a00;
             position: relative;
-            animation: text-appear 0.5s ease-out;
+            transition: transform 0.3s ease;
         }
 
-        .post-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 0.5rem;
+        .gnitter-post:hover {
+            transform: translateX(10px);
+            background: linear-gradient(90deg, #00ff0010 0%, transparent 100%);
         }
 
-        .gnome-avatar {
-            width: 40px;
-            height: 40px;
-            image-rendering: pixelated;
-            margin-right: 1rem;
+        .post-analytics {
+            display: none;
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #001100;
+            padding: 0.5rem;
             border: 2px solid #00ff0077;
         }
 
-        .post-handle {
-            color: #00ff0077;
-            margin-right: 1rem;
+        .gnitter-post:hover .post-analytics {
+            display: block;
+            animation: terminal-pop 0.3s ease;
         }
 
-        .post-content {
-            margin: 0.5rem 0;
-            line-height: 1.4;
+        /* New ASCII Art Generator */
+        .ascii-canvas {
+            display: grid;
+            grid-template-columns: repeat(16, 1fr);
+            gap: 2px;
+            margin: 1rem 0;
         }
 
-        .post-actions {
-            display: flex;
-            gap: 2rem;
-            margin-top: 1rem;
-            color: #00ff0077;
-        }
-
-        .post-action:hover {
-            color: var(--crt-green);
+        .ascii-pixel {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #00ff0077;
             cursor: pointer;
+            transition: background 0.1s ease;
         }
 
-        @keyframes flicker {
-            0% { opacity: 0.9; }
-            50% { opacity: 1; }
-            100% { opacity: 0.95; }
+        .ascii-pixel:hover {
+            background: #00ff0033;
         }
 
-        @keyframes text-appear {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .gnitter-posts::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+        /* Enhanced Command Line */
+        .terminal-cli {
+            position: fixed;
             bottom: 0;
-            background: linear-gradient(
-                to bottom,
-                transparent 50%,
-                var(--scanline) 51%,
-                transparent 51%
-            );
-            background-size: 100% 4px;
-            pointer-events: none;
-            animation: scanline 6s linear infinite;
+            width: 100%;
+            background: #001100;
+            border-top: 3px solid #00ff0077;
+            padding: 1rem;
+            display: flex;
+            gap: 1rem;
         }
 
-        @keyframes scanline {
+        .cli-prompt {
+            color: #00ff0077;
+        }
+
+        .cli-input {
+            flex-grow: 1;
+            background: transparent;
+            border: none;
+            color: var(--crt-green);
+            font-family: inherit;
+            font-size: 1.2rem;
+        }
+
+        /* New Animations */
+        @keyframes terminal-pop {
+            0% { transform: translateY(-50%) scale(0); }
+            80% { transform: translateY(-50%) scale(1.1); }
+            100% { transform: translateY(-50%) scale(1); }
+        }
+
+        @keyframes data-stream {
             0% { background-position: 0 0; }
             100% { background-position: 0 100%; }
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            .gnitter-posts {
+                height: 50vh;
+            }
+            
+            .terminal-header {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="terminal-header">
+        <div class="system-status">
+            <div class="status-light"></div>
+            <span>MYCELIUM NET: ONLINE</span>
+        </div>
+        <h1>Gnitter v2.4.1</h1>
+        <div class="system-status">
+            <span>MOON PHASE: WAXING</span>
+            <div class="status-light" style="background: #ffaa00"></div>
+        </div>
+    </div>
+
     <div class="container">
-        <header class="header">
-            <h1>Gnitter</h1>
-            <p>GARDEN SOCIAL NETWORK v1.2.3</p>
-        </header>
+        <div class="feed-controls">
+            <button class="gnome-button" onclick="toggleView('latest')">🌿 LATEST SPROUTS</button>
+            <button class="gnome-button" onclick="toggleView('trending')">🍄 TRENDING MOSS</button>
+            <button class="gnome-button" onclick="showASCIIcanvas()">🖌️ ASCII GARDEN</button>
+        </div>
 
-        <div class="gnitter-feed">
-            <div class="compose-box">
-                <textarea class="gnitter-input" id="postContent" 
-                    placeholder="WHAT'S HAPPENING IN THE GARDEN? (MAX 280 MOSSES)"
-                    maxlength="280"></textarea>
-            </div>
-            
-            <div class="gnitter-posts" id="postContainer">
-                <!-- Sample Posts -->
-                <div class="gnitter-post">
-                    <div class="post-header">
-                        <img src="gnome.png" class="gnome-avatar" alt="Gnome avatar">
-                        <span class="post-handle">@GardenGnome42</span>
-                        <span class="post-time">2h ago</span>
-                    </div>
-                    <div class="post-content">
-                        Just optimized the daisy alignment protocols. 
-                        Resistance from dandelion elements remains strong. 
-                        #LawnMaintenance #GnomeOps
-                    </div>
-                    <div class="post-actions">
-                        <span class="post-action">🐌 Moss (12)</span>
-                        <span class="post-action">🌱 Resprout</span>
-                        <span class="post-action">🍄 Toadstool</span>
-                    </div>
-                </div>
+        <!-- Add ASCII Canvas Generator -->
+        <div class="ascii-canvas" id="asciiCanvas" style="display: none;"></div>
 
-                <div class="gnitter-post">
-                    <div class="post-header">
-                        <img src="squirrel.png" class="gnome-avatar" alt="Squirrel avatar">
-                        <span class="post-handle">@AcornBandit</span>
-                        <span class="post-time">4h ago</span>
-                    </div>
-                    <div class="post-content">
-                        New high score! 23 acorns buried before sunrise. 
-                        Take THAT, blue jays! 🥜⚡
-                    </div>
-                    <div class="post-actions">
-                        <span class="post-action">🐌 Moss (42)</span>
-                        <span class="post-action">🌱 Resprout</span>
-                        <span class="post-action">🍄 Toadstool</span>
-                    </div>
-                </div>
-            </div>
+        <!-- Enhanced Post Feed -->
+        <div class="gnitter-posts" id="postContainer">
+            <!-- Posts get dynamically added here -->
+        </div>
+
+        <!-- Terminal CLI -->
+        <div class="terminal-cli">
+            <span class="cli-prompt">root@gnitter:~$</span>
+            <input type="text" class="cli-input" id="cliCommand" 
+                   placeholder="ENTER GNOME COMMAND... (HELP FOR COMMANDS)">
         </div>
     </div>
 
     <script>
-        const postContainer = document.getElementById('postContainer');
-        const postContent = document.getElementById('postContent');
+        // Initialize ASCII Canvas
+        const asciiCanvas = document.getElementById('asciiCanvas');
+        for(let i = 0; i < 256; i++) {
+            const pixel = document.createElement('div');
+            pixel.className = 'ascii-pixel';
+            pixel.onclick = () => pixel.textContent = pixel.textContent ? '' : '█';
+            asciiCanvas.appendChild(pixel);
+        }
 
-        // Sample auto-garden posts
-        const autoPosts = [
-            {
-                user: "@MushroomMonitor",
-                content: "Alert: Fairy ring detected in quadrant 3. Proceeding with spore analysis...",
-                likes: 8
-            },
-            {
-                user: "@HedgehogHacker",
-                content: "Just tunneled through the compost firewall. Worm access achieved! 🐛💻",
-                likes: 15
-            },
-            {
-                user: "@SystemGnome",
-                content: "Scheduled maintenance: Berry bushes updating to version 2.3.1. Expect temporary thorn coverage.",
-                likes: 23
-            }
-        ];
-
-        // Auto-post every 30 seconds
-        setInterval(() => {
-            const post = autoPosts[Math.floor(Math.random() * autoPosts.length)];
-            createPost(post.user, post.content, post.likes);
-        }, 30000);
-
-        postContent.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey && postContent.value.trim()) {
-                e.preventDefault();
-                createPost("@GardenGnome42", postContent.value);
-                postContent.value = '';
+        // Enhanced CLI Functionality
+        const cliCommand = document.getElementById('cliCommand');
+        cliCommand.addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') {
+                processCommand(cliCommand.value.trim().toLowerCase());
+                cliCommand.value = '';
             }
         });
 
-        function createPost(user, content, likes = 0) {
-            const postDiv = document.createElement('div');
-            postDiv.className = 'gnitter-post';
+        function processCommand(cmd) {
+            const response = document.createElement('div');
+            response.className = 'log-entry';
             
-            const postTime = new Date().toLocaleTimeString('en-US', 
-                { hour: 'numeric', minute: '2-digit', hour12: true });
-
-            postDiv.innerHTML = `
-                <div class="post-header">
-                    <img src="gnome.png" class="gnome-avatar" alt="Gnome avatar">
-                    <span class="post-handle">${user}</span>
-                    <span class="post-time">${postTime}</span>
-                </div>
-                <div class="post-content">${content}</div>
-                <div class="post-actions">
-                    <span class="post-action">🐌 Moss (${likes})</span>
-                    <span class="post-action">🌱 Resprout</span>
-                    <span class="post-action">🍄 Toadstool</span>
-                </div>
-            `;
-
-            postContainer.prepend(postDiv);
-            postContainer.scrollTop = 0;
+            switch(cmd) {
+                case 'help':
+                    response.innerHTML = `> AVAILABLE COMMANDS:<br>
+                    - moss [USER]: Check moss count<br>
+                    - toadstool [POST]: Save post<br>
+                    - weather: Current garden conditions<br>
+                    - gnomecode: View system info`;
+                    break;
+                case 'weather':
+                    response.textContent = `> CURRENT WEATHER: 75% HUMIDITY, LADYBUGS ACTIVE`;
+                    break;
+                case 'gnomecode':
+                    response.textContent = `> SYSTEM VERSION: 2.4.1 ROOTED OAK KERNEL`;
+                    break;
+                default:
+                    response.textContent = `> ERROR: UNKNOWN COMMAND '${cmd}'`;
+            }
+            
+            document.getElementById('postContainer').prepend(response);
         }
+
+        // Enhanced Post Analytics
+        document.addEventListener('mouseover', (e) => {
+            if(e.target.closest('.gnitter-post')) {
+                const post = e.target.closest('.gnitter-post');
+                const analytics = post.querySelector('.post-analytics');
+                if(analytics) {
+                    analytics.innerHTML = `MOSS: ${Math.floor(Math.random()*50)}<br>
+                    RESPROUTS: ${Math.floor(Math.random()*20)}`;
+                }
+            }
+        });
+
+        // View Toggling
+        function toggleView(view) {
+            const posts = document.querySelectorAll('.gnitter-post');
+            posts.forEach(post => {
+                post.style.display = view === 'trending' && 
+                    Math.random() > 0.5 ? 'none' : 'block';
+            });
+        }
+
+        // ASCII Canvas Toggle
+        function showASCIIcanvas() {
+            asciiCanvas.style.display = asciiCanvas.style.display === 'none' ? 
+                'grid' : 'none';
+        }
+
+        // Simulated Data Stream
+        setInterval(() => {
+            const dataStream = document.createElement('div');
+            dataStream.className = 'log-entry';
+            dataStream.textContent = `> DATA STREAM: ${Math.random().toString(36).substr(2, 5).toUpperCase()}`;
+            document.getElementById('postContainer').prepend(dataStream);
+        }, 10000);
     </script>
 </body>
 </html>
