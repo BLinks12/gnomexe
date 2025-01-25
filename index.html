@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gnome.exe - Garden Terminal</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --crt-green: #00ff00;
+            --crt-glow: rgba(0,255,0,0.1);
+            --scanline: rgba(0,0,0,0.3);
+            --phosphor: rgba(0,255,0,0.1);
+        }
+
+        body {
+            background-color: #000;
+            color: var(--crt-green);
+            font-family: 'VT323', monospace;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 20px solid #333;
+            border-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAIklEQVQIW2NkQAKrVq36zwjjgzhhYWGMYAEYB8RmROaABADeOQ8CXl/xfgAAAABJRU5ErkJggg==') 20 stretch;
+            background-image: 
+                linear-gradient(var(--phosphor) 1px, transparent 1px),
+                linear-gradient(90deg, var(--phosphor) 1px, transparent 1px),
+                repeating-linear-gradient(180deg, transparent, var(--scanline) 3px);
+            background-size: 4px 4px, 4px 4px, auto;
+            animation: flicker 0.1s infinite;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 90%;
+            margin: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px var(--crt-green);
+            margin: 0;
+            position: relative;
+        }
+
+        .header h1::after {
+            content: "v1.3.7";
+            position: absolute;
+            right: -50px;
+            bottom: 0;
+            font-size: 1rem;
+            color: #00ff0077;
+        }
+
+        .gnome-canvas {
+            width: 400px;
+            height: 400px;
+            margin: 2rem auto;
+            border: 3px solid #00ff0077;
+            background: #001100;
+            box-shadow: inset 0 0 20px #002200;
+            display: grid;
+            place-content: center;
+            position: relative;
+        }
+
+        .pixel-art {
+            width: 90%;
+            height: 90%;
+            object-fit: contain;
+            image-rendering: pixelated;
+            border: 2px solid #00ff0077;
+            padding: 10px;
+            animation: crt-flicker 2s infinite;
+        }
+
+        .terminal-output {
+            border-left: 4px solid var(--crt-green);
+            padding: 1rem;
+            margin: 2rem 0;
+            background: #001100;
+            text-shadow: 0 0 5px var(--crt-green);
+        }
+
+        .command-interface {
+            border: 3px solid #00ff0077;
+            padding: 1rem;
+            background: #001100;
+            box-shadow: inset 0 0 20px #002200;
+        }
+
+        .command-history {
+            height: 300px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border: 2px solid #00ff0033;
+            position: relative;
+        }
+
+        .command-input {
+            width: 100%;
+            padding: 1rem;
+            background: #002200;
+            border: 2px solid #00ff0077;
+            color: var(--crt-green);
+            font-family: inherit;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .command-input:focus {
+            outline: none;
+            box-shadow: 0 0 15px #00ff0033;
+        }
+
+        .command-line {
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+            position: relative;
+            animation: text-appear 0.5s ease-out;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.9; }
+            50% { opacity: 1; }
+            100% { opacity: 0.95; }
+        }
+
+        @keyframes crt-flicker {
+            0% { opacity: 0.9; }
+            50% { opacity: 1; }
+            100% { opacity: 0.95; }
+        }
+
+        @keyframes text-appear {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .command-history::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                to bottom,
+                transparent 50%,
+                var(--scanline) 51%,
+                transparent 51%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            animation: scanline 6s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>gnome.exe</h1>
+            <p>GARDEN MAINTENANCE TERMINAL</p>
+        </header>
+
+        <div class="gnome-canvas">
+            <img src="gnome.png" alt="Garden gnome interface" class="pixel-art">
+        </div>
+
+        <div class="terminal-output">
+            <h2>SYSTEM STATUS</h2>
+            <p>> INITIALIZING ROOT SYSTEMS...</p>
+            <p>> HAT INTEGRITY: 100%</p>
+            <p>> BEARD FOLIAGE: LUSH</p>
+            <p>> MUSHROOM NETWORK: CONNECTED</p>
+        </div>
+
+        <div class="command-interface">
+            <div class="command-history" id="commandHistory">
+                <div class="command-line">> SYSTEM SPROUTED</div>
+                <div class="command-line">> *rustling leaves* (Status: Awaiting commands)</div>
+            </div>
+            <input type="text" class="command-input" id="userCommand" 
+                   placeholder="ENTER GNOMISH COMMAND..." 
+                   maxlength="60">
+        </div>
+    </div>
+
+    <script>
+        const gnomeResponses = [
+            "*nod* (Command: Rooted)",
+            "*pipe puff* (Processing: 23%)",
+            "*hat adjust* (Alert: Aphid detected)",
+            "*beard stroke* (Query: Fertilize? Y/N)",
+            "*lantern lift* (System: Moonlight mode)",
+            "*wheel squeak* (Task: Soil turning)",
+            "*mushroom glow* (Network: Mycelium active)",
+            "*stone polish* (Maintenance: Pathway clear)",
+            "*raindrop sound* (Warning: Overhydration)",
+            "*acorn click* (Storage: Nuts secure)"
+        ];
+
+        const commandHistory = document.getElementById('commandHistory');
+        const userCommand = document.getElementById('userCommand');
+
+        userCommand.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && userCommand.value.trim()) {
+                // User command
+                const userLine = document.createElement('div');
+                userLine.className = 'command-line';
+                userLine.textContent = `> ${userCommand.value.toUpperCase()}`;
+                commandHistory.appendChild(userLine);
+
+                // Gnome response
+                setTimeout(() => {
+                    const response = gnomeResponses[Math.floor(Math.random() * gnomeResponses.length)];
+                    const responseLine = document.createElement('div');
+                    responseLine.className = 'command-line';
+                    responseLine.textContent = `> ${response}`;
+                    commandHistory.appendChild(responseLine);
+                    commandHistory.scrollTop = commandHistory.scrollHeight;
+                }, 700);
+
+                userCommand.value = '';
+                commandHistory.scrollTop = commandHistory.scrollHeight;
+            }
+        });
+    </script>
+</body>
+</html>
